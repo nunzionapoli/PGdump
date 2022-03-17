@@ -21,7 +21,7 @@ dirYearly=$backupDirectory/yearly
 filenameDaily=backup-$(date +%Y-%m-%d)
 filenameMonthly=backup-$(date +%Y-%m)
 filenameYearly=backup-$(date +%Y)
-sqlfile=$dirDaily/$filenameDaily.sql
+sqlfile=$dirDaily/$filenameDaily.dmp
 zipfile=$dirDaily/$filenameDaily.zip
 logfile=$backupDirectory/history.log
 
