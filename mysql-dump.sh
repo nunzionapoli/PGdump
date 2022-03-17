@@ -11,13 +11,13 @@
 ####################################################################################
 ####################################################################################
 
-CONFIGFILE=/etc/mydumpadmin/settings.conf
+CONFIGFILE=/etc/database_dump/settings.conf
 
 source $CONFIGFILE
 DATE_FORMAT='%Y%m%d'
 CURRENT_DATE=$(date +"${DATE_FORMAT}")
 CURRENT_TIME=$(date +"%H%M")
-LOGFILENAME=$LOG_PATH/mydumpadmin-${CURRENT_DATE}-${CURRENT_TIME}.log
+LOGFILENAME=$LOG_PATH/database_dump-${CURRENT_DATE}-${CURRENT_TIME}.log
 CREDENTIALS="--defaults-file=$CREDENTIAL_FILE"
 
 

@@ -8,7 +8,7 @@ Clone this repository under **/etc** directory.
 
 > cd /etc/
 
-> git clone https://github.com/tecrahul/mydumpadmin
+> git clone https://github.com/tecrahul/database_dump
 
 
 ### Configure setup
@@ -24,7 +24,7 @@ Now edit **credentials.txt** file and put your mysql server login details
 
 Run the following commands step by step to execute this script.
 
-> cd /etc/mydumpadmin
+> cd /etc/database_dump
 
 > chmod a+x mysql-dump.sh
 
@@ -35,7 +35,7 @@ Run the following commands step by step to execute this script.
 
 You can also schedule this to run on daily basis using crontab. Add the following settings to crontab to run on 2:00 AM daily.
 
-> 0 2 * * * cd /etc/mydumpadmin && ./mysql-dump.sh
+> 0 2 * * * cd /etc/database_dump && ./mysql-dump.sh
 
 
 ### Visit here
