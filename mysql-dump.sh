@@ -22,7 +22,7 @@ filenameMonthly=bck-$(date +%Y-%m)
 filenameYearly=bck-$(date +%Y)
 logfile=$LOCAL_BACKUP_DIR/history.log
 # Make sure directories exists
-[ ! -d $LOCAL_BACKUP_DIR ] mkdir -p $LOCAL_BACKUP_DIR
+[ ! -d $LOCAL_BACKUP_DIR ] && mkdir -p $LOCAL_BACKUP_DIR
 mkdir -p $dirDaily
 mkdir -p $dirMonthly
 mkdir -p $dirYearly
@@ -71,16 +71,16 @@ pgdb_backup(){
         for db in $DATABASES
         do
                 errorDuringBackup=""
-                FILE_NAME="${db}.${filenameDaily}"
-                FILENAMEPATH="$dirDaily$FILE_NAME"
+                FILE_NAME="${db}_${filenameDaily}"
+                FILENAMEPATH="${dirDaily}/$FILE_NAME"
                 [ $VERBOSE -eq 1 ] && echo -en "Database> $db... \n"
 
  #               ${PGDUMP} --host ${PG_HOST} --username $user --format=custom --file ${FILENAMEPATH} --dbname={db}
 touch ${FILENAMEPATH}
                 if [ $? == 0 ]; then
                         # Update monthly/yearly backups
-                        cp $FILENAMEPATH $dirMonthly/$db_$filenameMonthly.dmp
-                        cp $FILENAMEPATH $dirYearly/$db_$filenameYearly.dmp
+                        cp $FILENAMEPATH $dirMonthly/${db}_$filenameMonthly.dmp
+                        cp $FILENAMEPATH $dirYearly/${db}_$filenameYearly.dmp
                         finalOutput="backup success"
                         [ $FTP_ENABLE -eq 1 ] && ftp_backup
                         [ $SFTP_ENABLE -eq 1 ] && sftp_backup
@@ -120,12 +120,12 @@ check_cmds(){
 	if [ $SFTP_ENABLE -eq 1 ]; then
 		[ ! -x $SCP ] && close_on_error "FILENAME $SCP does not exists. Make sure correct path is set in $CONFIGFILE."
 	fi
-	if [ $DB_TYPE -eq "MYSQL" ]; then
+	if [ $DB_TYPE == "MYSQL" ]; then
         [ ! -x $MYSQL ] && close_on_error "FILENAME $MYSQL does not exists. Make sure correct path is set in $CONFIGFILE."
         [ ! -x $MYSQLDUMP ] && close_on_error "FILENAME $MYSQLDUMP does not exists. Make sure correct path is set in $CONFIGFILE."
         [ ! -x $MYSQLCHECK ] && close_on_error "FILENAME $MYSQLCHECK does not exists. Make sure correct path is set in $CONFIGFILE."
 	fi
-	if [ $DB_TYPE -eq "PGSQL" ]; then
+	if [ $DB_TYPE == "PGSQL" ]; then
         [ ! -x $PSQL ] && close_on_error "FILENAME $PSQL does not exists. Make sure correct path is set in $CONFIGFILE."
         [ ! -x $PGDUMP ] && close_on_error "FILENAME $PGDUMP does not exists. Make sure correct path is set in $CONFIGFILE."
         [ ! -x $PGCHECK ] && close_on_error "FILENAME $PGCHECK does not exists. Make sure correct path is set in $CONFIGFILE."
@@ -203,13 +203,13 @@ send_report(){
 ### main ####
 check_config
 check_cmds
-if [ $DB_TYPE -eq "MYSQL" ]; then
+if [ $DB_TYPE == "MYSQL" ]; then
         #check_mysql_connection
         #mysqldb_backup
 fi
-if [ $DB_TYPE -eq "PGSQL" ]; then
+if [ $DB_TYPE == "PGSQL" ]; then
         #check_pgsql_connection
-        #pgdb_backup
+        pgdb_backup
 fi
 #clean_old_backups
 send_report
